@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>s‑ANT1 — Screening in ACLD without overt HE</title>
+  <meta name="description" content="s‑ANT1 calculator (Animal Naming Test) for Advanced Chronic Liver Disease without overt Hepatic Encephalopathy." />
+  style.css
+</head>
+<body>
+  <section class="mdc-container">
+    <header class="mdc-header">
+      <h1 class="mdc-title">s‑ANT1 (Animal Naming Test) — Screening in Advanced Chronic Liver Disease without overt Hepatic Encephalopathy</h1>
+      <p class="mdc-subtitle">
+        <strong>ANT</strong> stands for <em>Animal Naming Test in 1 minute</em>. This calculator estimates <strong>s‑ANT1</strong> and suggests next steps for patients with
+        advanced chronic liver disease (ACLD) <em>without overt Hepatic Encephalopathy (HE)</em>.
+      </p>
+    </header>
+
+    <div class="mdc-grid">
+      <!-- Left: Inputs -->
+      <section class="mdc-card">
+        <h2 class="mdc-card-title">Inputs</h2>
+
+        <form id="calc-form" class="mdc-form" novalidate>
+          <!-- ANT -->
+          <div class="mdc-field">
+            <label for="ant" class="mdc-label">ANT (animals named in 1 minute)</label>
+            <input id="ant" name="ant" type="number" inputmode="numeric" min="0" max="100" step="1" placeholder="e.g., 18" required>
+            <div class="mdc-hint">Integer count of unique animal names in 60 seconds.</div>
+          </div>
+
+          <!-- Age -->
+          <div class="mdc-field">
+            <label for="age" class="mdc-label">Age (years)</label>
+            <input id="age" name="age" type="number" inputmode="numeric" min="0" max="120" step="1" placeholder="e.g., 58" required>
+          </div>
+
+          <!-- Years of Education -->
+          <div class="mdc-field">
+            <label for="yoe" class="mdc-label">Years of Education</label>
+            <input id="yoe" name="yoe" type="number" inputmode="numeric" min="0" max="40" step="1" placeholder="e.g., 12" required>
+          </div>
+
+          <div class="mdc-actions">
+            <button type="button" id="btn-calc" class="btn primary">Calculate</button>
+            <button type="button" id="btn-reset" class="btn">Reset</button>
+          </div>
+
+          <div id="validation-msg" class="mdc-validation" role="alert" aria-live="polite"></div>
+        </form>
+      </section>
+
+      <!-- Right: Result -->
+      <section class="mdc-card">
+        <h2 class="mdc-card-title">Result</h2>
+
+        <div class="mdc-result">
+          <div class="mdc-metric">
+            <div class="mdc-metric-label">s‑ANT1</div>
+            <div id="out-score" class="mdc-metric-value">—</div>
+          </div>
+
+          <div id="out-interpretation" class="mdc-interpretation mdc-interpretation--neutral">
+            <div class="mdc-badge">Awaiting input</div>
+            <h3 id="out-title">—</h3>
+            <p id="out-advice" class="mdc-advice">Enter values and click Calculate.</p>
+          </div>
+        </div>
+
+        <details class="mdc-details">
+          <summary>Formula</summary>
+          <pre class="mdc-code"><code>s-ANT1 = ( ANT − 11.3984 − (Age × 0.0795) + (Age² × 0.0014) − (YearsOfEducation × 0.8008) + (YearsOfEducation² × 0.0165) ) / 4.1399</code></pre>
+        </details>
+
+        <details class="mdc-details">
+          <summary>Interpretation thresholds</summary>
+          <ul class="mdc-list">
+            <li><strong>Covert HE excluded</strong>: s‑ANT1 &gt; 15.71</li>
+            <li><strong>Uncertain</strong>: 6.47 ≤ s‑ANT1 ≤ 15.71</li>
+            <li><strong>Assume covert HE</strong>: s‑ANT1 &lt; 6.47</li>
+          </ul>
+        </details>
+
+        <p class="mdc-disclaimer">
+          <strong>Disclaimer:</strong> For informational purposes only and not a substitute for professional medical judgment.
+        </p>
+      </section>
+    </div>
+  </section>
+
+  script.js</script>
+</body>
+</html>
