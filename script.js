@@ -1,26 +1,28 @@
-(function () {
-  const ant = document.getElementById('ant');
-  const age = document.getElementById('age');
-  const yoe = document.getElementById('yoe');
+document.addEventListener('DOMContentLoaded', function () {
+  // ===== Grab elements =====ElementById('yoe');  // ===== Grab elements =====
 
-  const btnCalc = document.getElementById('btn-calc');
-  const btnReset = document.getElementById('btn-reset');
-  const msg = document.getElementById('validation-msg');
+  var btnCalc = document.getElementById('btn-calc');
+  var btnReset = document.getElementById('btn-reset');
+  var msg = document.getElementById('validation-msg');
 
-  const outScore = document.getElementById('out-score');
-  const outTitle = document.getElementById('out-title');
-  const outAdvice = document.getElementById('out-advice');
-  const outBox = document.getElementById('out-interpretation');
+  var outScore = document.getElementById('out-score');
+  var outTitle = document.getElementById('out-title');
+  var outAdvice = document.getElementById('out-advice');
+  var outBox = document.getElementById('out-interpretation');
 
+  // Sanity log
+  console.log('[s-ANT1] Script loaded. btn-calc:', !!btnCalc, 'btn-reset:', !!btnReset);
+
+  // ===== Helpers =====
   function parseNum(el) {
-    const v = el.value.trim();
+    var v = (el && el.value) ? el.value.trim() : '';
     if (v === '') return null;
-    const n = Number(v);
+    var n = Number(v);
     return Number.isFinite(n) ? n : null;
   }
 
   function validate(a, b, c) {
-    const issues = [];
+    var issues = [];
     if (a === null || b === null || c === null) {
       issues.push('All inputs are required.');
     }
@@ -32,7 +34,7 @@
 
   // s-ANT1 = ( ANT − 11.3984 − (Age*0.0795) + (Age^2*0.0014) − (YearsOfEducation*0.8008) + (YearsOfEducation^2*0.0165) ) / 4.1399
   function computeScore(ANT, Age, YearsOfEducation) {
-    const term =
+    var term =
       ANT
       - 11.3984
       - (Age * 0.0795)
@@ -47,7 +49,7 @@
     // > 15.71 => "Covert HE excluded"
     // 6.47 <= score <= 15.71 => "Uncertain"
     // < 6.47 => "Assume covert HE"
-    const res = { label: '', advice: '', cls: 'mdc-interpretation--neutral' };
+    var res = { label: '', advice: '', cls: 'mdc-interpretation--neutral' };
     if (score > 15.71) {
       res.label = 'Covert HE excluded';
       res.advice = 'Consider alternative diagnosis if neuropsychiatric signs or symptoms are present.';
@@ -69,12 +71,13 @@
     return x.toFixed(2);
   }
 
+  // ===== Actions =====
   function calculate() {
-    const vANT = parseNum(ant);
-    const vAge = parseNum(age);
-    const vYOE = parseNum(yoe);
+    var vANT = parseNum(ant);
+    var vAge = parseNum(age);
+    var vYOE = parseNum(yoe);
 
-    const issues = validate(vANT, vAge, vYOE);
+    var issues = validate(vANT, vAge, vYOE);
     msg.textContent = issues.length ? issues.join(' ') : '';
 
     if (issues.length) {
@@ -85,8 +88,8 @@
       return;
     }
 
-    const score = computeScore(vANT, vAge, vYOE);
-    const interp = interpret(score);
+    var score = computeScore(vANT, vAge, vYOE);
+    var interp = interpret(score);
 
     outScore.textContent = formatScore(score);
     outTitle.textContent = interp.label;
@@ -95,9 +98,9 @@
   }
 
   function resetAll() {
-    ant.value = '';
-    age.value = '';
-    yoe.value = '';
+    if (ant) ant.value = '';
+    if (age) age.value = '';
+    if (yoe) yoe.value = '';
     msg.textContent = '';
     outScore.textContent = '—';
     outTitle.textContent = '—';
@@ -105,11 +108,17 @@
     outBox.className = 'mdc-interpretation mdc-interpretation--neutral';
   }
 
-  btnCalc.addEventListener('click', calculate);
-  btnReset.addEventListener('click', resetAll);
+  // ===== Wire up events =====
+  if (btnCalc) btnCalc.addEventListener('click', calculate);
+  if (btnReset) btnReset.addEventListener('click', resetAll);
 
-  // Allow pressing Enter in the form to calculate
-  document.getElementById('calc-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    calculate();
-  });
+  var form = document.getElementById('calc-form');
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      calculate();
+    });
+  }
+});
+  var ant = document.getElementById('ant');
+  var age = document.getElementById('age');
