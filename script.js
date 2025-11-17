@@ -113,4 +113,3 @@
     e.preventDefault();
     calculate();
   });
-})();
