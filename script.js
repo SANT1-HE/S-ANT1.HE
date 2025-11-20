@@ -41,7 +41,10 @@ document.addEventListener('DOMContentLoaded', function () {
       + (Math.pow(Age, 2) * 0.0014)
       - (YearsOfEducation * 0.8008)
       + (Math.pow(YearsOfEducation, 2) * 0.0165);
-
+    
+    console.log( ANT, Age, YearsOfEducation);
+    console.log((Age * 0.0795), Math.pow(Age, 2) * 0.0014, YearsOfEducation * 0.8008, Math.pow(YearsOfEducation, 2) * 0.0165);
+    console.log(term / 4.1399);
     return term / 4.1399;
   }
 
