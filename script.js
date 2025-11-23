@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // ===== Language packs (EN & PT-PT) =====
   var i18n = {
     en: {
-      toggleLabel: 'PT-PT',
+      toggleLabel: 'PT',
       title: 's‑ANT1 (Animal Naming Test) — Screening in Advanced Chronic Liver Disease without overt Hepatic Encephalopathy',
       subtitle: 'ANT stands for <em>Animal Naming Test in 1 minute</em>. This calculator estimates <strong>s‑ANT1</strong> and suggests next steps for patients with advanced chronic liver disease (ACLD) <em>without overt Hepatic Encephalopathy (HE)</em>.',
       inputs: 'Inputs',
@@ -20,9 +20,9 @@ document.addEventListener('DOMContentLoaded', function () {
       formulaSummary: 'Formula',
       formulaCode: 's-ANT1 = ( ANT − 11.3984 − (Age × 0.0795) + (Age² × 0.0014) − (YearsOfEducation × 0.8008) + (YearsOfEducation² × 0.0165) ) / 4.1399 + ANT',
       thresholdsSummary: 'Interpretation thresholds',
-      th1: '<strong>Covert HE excluded</strong>: s‑ANT1 &gt; 15.71',
+      th1: '<strong>Covert Hepatic Encephalopathy excluded</strong>: s‑ANT1 &gt; 15.71',
       th2: '<strong>Uncertain</strong>: 6.47 ≤ s‑ANT1 ≤ 15.71',
-      th3: '<strong>Assume covert HE</strong>: s‑ANT1 &lt; 6.47',
+      th3: '<strong>Assume covert Hepatic Encephalopathy</strong>: s‑ANT1 &lt; 6.47',
       disclaimer: '<strong>Disclaimer:</strong> For informational purposes only and not a substitute for professional medical judgment.',
       // Validation
       vAllRequired: 'All inputs are required.',
@@ -65,11 +65,11 @@ document.addEventListener('DOMContentLoaded', function () {
       vAgeRange: 'A idade deve estar entre 0 e 120.',
       vYoeRange: 'Os anos de escolaridade devem estar entre 0 e 40.',
       // Interpretation labels & advice
-      labelExcluded: 'EH excluída',
+      labelExcluded: 'Encefalopatia Hepática excluída',
       adviceExcluded: 'Considerar diagnóstico alternativo em caso de sinais/sintomas neuropsiquiátricos.',
       labelUncertain: 'Indeterminado',
       adviceUncertain: 'Realizar Score Psicométrico de Encefalopatia Hepática, avaliação neuropsicológica formal ou ponderar testes alternativos.',
-      labelAssume: 'Assumir EH',
+      labelAssume: 'Assumir Encefalopatia Hepática',
       adviceAssume: 'Iniciar tratamento. Aconcelhar para não conduzir se não fizer tratamento'
     }
   };
