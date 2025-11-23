@@ -1,5 +1,154 @@
+
 document.addEventListener('DOMContentLoaded', function () {
-  // ===== Grab elements =====ElementById('yoe');  // ===== Grab elements =====
+  // ===== Language packs (EN & PT-PT) =====
+  var i18n = {
+    en: {
+      toggleLabel: 'PT-PT',
+      title: 's‑ANT1 (Animal Naming Test) — Screening in Advanced Chronic Liver Disease without overt Hepatic Encephalopathy',
+      subtitle: 'ANT stands for <em>Animal Naming Test in 1 minute</em>. This calculator estimates <strong>s‑ANT1</strong> and suggests next steps for patients with advanced chronic liver disease (ACLD) <em>without overt Hepatic Encephalopathy (HE)</em>.',
+      inputs: 'Inputs',
+      antLabel: 'ANT (animals named in 1 minute)',
+      antHint: 'Integer count of unique animal names in 60 seconds.',
+      ageLabel: 'Age (years)',
+      yoeLabel: 'Years of Education',
+      calc: 'Calculate',
+      reset: 'Reset',
+      result: 'Result',
+      scoreLabel: 's‑ANT1',
+      awaiting: 'Awaiting input',
+      adviceDefault: 'Enter values and click Calculate.',
+      formulaSummary: 'Formula',
+      formulaCode: 's-ANT1 = ( ANT − 11.3984 − (Age × 0.0795) + (Age² × 0.0014) − (YearsOfEducation × 0.8008) + (YearsOfEducation² × 0.0165) ) / 4.1399 + ANT',
+      thresholdsSummary: 'Interpretation thresholds',
+      th1: '<strong>Covert HE excluded</strong>: s‑ANT1 &gt; 15.71',
+      th2: '<strong>Uncertain</strong>: 6.47 ≤ s‑ANT1 ≤ 15.71',
+      th3: '<strong>Assume covert HE</strong>: s‑ANT1 &lt; 6.47',
+      disclaimer: '<strong>Disclaimer:</strong> For informational purposes only and not a substitute for professional medical judgment.',
+      // Validation
+      vAllRequired: 'All inputs are required.',
+      vAntRange: 'ANT should be between 0 and 100.',
+      vAgeRange: 'Age should be between 0 and 120.',
+      vYoeRange: 'Years of Education should be between 0 and 40.',
+      // Interpretation labels & advice
+      labelExcluded: 'Covert HE excluded',
+      adviceExcluded: 'Consider alternative diagnosis if neuropsychiatric signs or symptoms are present.',
+      labelUncertain: 'Uncertain',
+      adviceUncertain: 'PHES; neuropsychological assessment; alternative tests',
+      labelAssume: 'Assume covert HE',
+      adviceAssume: 'Start treatment'
+    },
+    'pt-pt': {
+      toggleLabel: 'EN',
+      title: 's‑ANT1 (Animal Naming Test simplificado) — Rastreio de Encefalopatia Hepática Covert na Doença Hepática Crónica avançada',
+      subtitle: '<strong>ANT</strong> significa <em>Animal Naming Test em 1 minuto</em> que consiste num teste em que se pede ao doente "Vou-lhe pedir que me diga o maior número de animais que conseguir. Não deve repetir a mesma espécie animal com pequenas variações como por exemplo: cão, cadela. Tem 1 minuto para me dizer o maior número de animais diferentes. Pronto? Começar!". Esta plataforma calcula o valor simplificado do <strong>ANT1</strong>, mediante a idade e anos de escolaridade, para realizar o diagnóstico de <em>Encefalopatia Hepática Covert</em> e ajudar na decisão sobre os p´roximos passos a seguir.',
+      inputs: 'Variávies',
+      antLabel: 'ANT (animais nomeados em 1 minuto)',
+      antHint: 'Contagem inteira de nomes de animais únicos em 60 segundos.',
+      ageLabel: 'Idade (anos)',
+      yoeLabel: 'Anos de escolaridade',
+      calc: 'Calcular',
+      reset: 'Limpar',
+      result: 'Resultado',
+      scoreLabel: 's‑ANT1',
+      awaiting: 'A aguardar dados',
+      adviceDefault: 'Introduza os valores e clique em Calcular.',
+      formulaSummary: 'Fórmula',
+      formulaCode: 's-ANT1 = ( ANT − 11.3984 − (Idade × 0.0795) + (Idade² × 0.0014) − (Anos de escolaridade × 0.8008) + (Anos de escolaridade² × 0.0165) ) / 4.1399 + ANT',
+      thresholdsSummary: 'Limiares de interpretação',
+      th1: '<strong>Excluída Encefalopatia Hepática covert</strong>: s‑ANT1 &gt; 15.71',
+      th2: '<strong>Diagnóstico incerto de Encefalopatia Hepática covert</strong>: 6.47 ≤ s‑ANT1 ≤ 15.71',
+      th3: '<strong>Assumir Encefalopatia Hepática covert </strong>: s‑ANT1 &lt; 6.47',
+      disclaimer: '<strong>Aviso:</strong> Para fins informativos e não substitui o juízo clínico profissional.',
+      // Validation
+      vAllRequired: 'Todos os campos são obrigatórios.',
+      vAntRange: 'O ANT deve estar entre 0 e 100.',
+      vAgeRange: 'A idade deve estar entre 0 e 120.',
+      vYoeRange: 'Os anos de escolaridade devem estar entre 0 e 40.',
+      // Interpretation labels & advice
+      labelExcluded: 'EH excluída',
+      adviceExcluded: 'Considerar diagnóstico alternativo em caso de sinais/sintomas neuropsiquiátricos.',
+      labelUncertain: 'Indeterminado',
+      adviceUncertain: 'Realizar Score Psicométrico de Encefalopatia Hepática, avaliação neuropsicológica formal ou ponderar testes alternativos.',
+      labelAssume: 'Assumir EH',
+      adviceAssume: 'Iniciar tratamento. Aconcelhar para não conduzir se não fizer tratamento'
+    }
+  };
+
+  // ===== Language utilities =====
+  function getLang() {
+    var stored = localStorage.getItem('lang');
+    if (stored) return stored;
+    // Default to English; if browser language is pt-PT, prefer pt-pt
+    var nav = (navigator.language || '').toLowerCase();
+    if (nav === 'pt-pt') return 'pt-pt';
+    return 'en';
+  }
+
+  function applyLang(lang) {
+    var pack = i18n[lang] || i18n.en;
+    // Update document language & toggle button label
+    document.documentElement.setAttribute('lang', lang === 'pt-pt' ? 'pt' : 'en');
+    document.documentElement.setAttribute('data-lang', lang);
+    var toggle = document.getElementById('lang-toggle');
+    if (toggle) toggle.textContent = pack.toggleLabel;
+
+    // Update static texts (innerHTML used only where markup is needed)
+    setText('t-title', pack.title, true);
+    setText('t-subtitle', pack.subtitle, true);
+    setText('t-inputs', pack.inputs);
+    setText('t-ant-label', pack.antLabel);
+    setText('t-ant-hint', pack.antHint);
+    setText('t-age-label', pack.ageLabel);
+    setText('t-yoe-label', pack.yoeLabel);
+    setText('t-calc', pack.calc);
+    setText('t-reset', pack.reset);
+    setText('t-result', pack.result);
+    setText('t-score-label', pack.scoreLabel);
+    setText('t-await', pack.awaiting);
+    // If advice is still the default / neutral state, refresh it
+    var outTitle = document.getElementById('out-title');
+    if (outTitle && outTitle.textContent === '—') {
+      setText('out-advice', pack.adviceDefault);
+    }
+    setText('t-formula-summary', pack.formulaSummary);
+    setText('t-formula-code', pack.formulaCode, true);
+    setText('t-thresholds-summary', pack.thresholdsSummary);
+    setText('t-th1', pack.th1, true);
+    setText('t-th2', pack.th2, true);
+    setText('t-th3', pack.th3, true);
+    setText('t-disclaimer', pack.disclaimer, true);
+
+    // Update validation messages map
+    validationMessages = {
+      allRequired: pack.vAllRequired,
+      antRange: pack.vAntRange,
+      ageRange: pack.vAgeRange,
+      yoeRange: pack.vYoeRange
+    };
+
+    // Update interpretation text pack for runtime results
+    interpretationPack = {
+      excluded: { label: pack.labelExcluded, advice: pack.adviceExcluded, cls: 'mdc-interpretation--ok' },
+      uncertain: { label: pack.labelUncertain, advice: pack.adviceUncertain, cls: 'mdc-interpretation--warn' },
+      assume: { label: pack.labelAssume, advice: pack.adviceAssume, cls: 'mdc-interpretation--risk' },
+      neutral: { label: '—', advice: pack.adviceDefault, cls: 'mdc-interpretation--neutral' }
+    };
+  }
+
+  function setText(id, text, allowHTML) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (allowHTML) {
+      el.innerHTML = text;
+    } else {
+      el.textContent = text;
+    }
+  }
+
+  // ===== Grab elements =====
+  var ant = document.getElementById('ant');
+  var age = document.getElementById('age');
+  var yoe = document.getElementById('yoe');
 
   var btnCalc = document.getElementById('btn-calc');
   var btnReset = document.getElementById('btn-reset');
@@ -10,8 +159,8 @@ document.addEventListener('DOMContentLoaded', function () {
   var outAdvice = document.getElementById('out-advice');
   var outBox = document.getElementById('out-interpretation');
 
-  // Sanity log
-  console.log('[s-ANT1] Script loaded. btn-calc:', !!btnCalc, 'btn-reset:', !!btnReset);
+  var interpretationPack = null;
+  var validationMessages = null;
 
   // ===== Helpers =====
   function parseNum(el) {
@@ -24,11 +173,11 @@ document.addEventListener('DOMContentLoaded', function () {
   function validate(a, b, c) {
     var issues = [];
     if (a === null || b === null || c === null) {
-      issues.push('All inputs are required.');
+      issues.push(validationMessages.allRequired);
     }
-    if (a !== null && (a < 0 || a > 100)) issues.push('ANT should be between 0 and 100.');
-    if (b !== null && (b < 0 || b > 120)) issues.push('Age should be between 0 and 120.');
-    if (c !== null && (c < 0 || c > 40)) issues.push('Years of Education should be between 0 and 40.');
+    if (a !== null && (a < 0 || a > 100)) issues.push(validationMessages.antRange);
+    if (b !== null && (b < 0 || b > 120)) issues.push(validationMessages.ageRange);
+    if (c !== null && (c < 0 || c > 40)) issues.push(validationMessages.yoeRange);
     return issues;
   }
 
@@ -41,35 +190,17 @@ document.addEventListener('DOMContentLoaded', function () {
       + (Math.pow(Age, 2) * 0.0014)
       - (YearsOfEducation * 0.8008)
       + (Math.pow(YearsOfEducation, 2) * 0.0165);
-    
-    console.log( ANT, Age, YearsOfEducation);
-    console.log((Age * 0.0795), Math.pow(Age, 2) * 0.0014, YearsOfEducation * 0.8008, Math.pow(YearsOfEducation, 2) * 0.0165);
-    console.log(term / 4.1399);
 
     term = term / 4.1399;
-    
+
     return term + ANT;
   }
 
   function interpret(score) {
-    // > 15.71 => "Covert HE excluded"
-    // 6.47 <= score <= 15.71 => "Uncertain"
-    // < 6.47 => "Assume covert HE"
-    var res = { label: '', advice: '', cls: 'mdc-interpretation--neutral' };
-    if (score > 15.71) {
-      res.label = 'Covert HE excluded';
-      res.advice = 'Consider alternative diagnosis if neuropsychiatric signs or symptoms are present.';
-      res.cls = 'mdc-interpretation--ok';
-    } else if (score >= 6.47) {
-      res.label = 'Uncertain';
-      res.advice = 'PHES; neuropsychological assessment; alternative tests';
-      res.cls = 'mdc-interpretation--warn';
-    } else {
-      res.label = 'Assume covert HE';
-      res.advice = 'Start treatment';
-      res.cls = 'mdc-interpretation--risk';
-    }
-    return res;
+    // > 15.71 => excluded; 6.47–15.71 => uncertain; < 6.47 => assume
+    if (score > 15.71) return interpretationPack.excluded;
+    if (score >= 6.47) return interpretationPack.uncertain;
+    return interpretationPack.assume;
   }
 
   function formatScore(x) {
@@ -89,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (issues.length) {
       outScore.textContent = '—';
       outTitle.textContent = '—';
-      outAdvice.textContent = 'Fix input issues and recalculate.';
+      outAdvice.textContent = interpretationPack.neutral.advice;
       outBox.className = 'mdc-interpretation mdc-interpretation--neutral';
       return;
     }
@@ -110,7 +241,7 @@ document.addEventListener('DOMContentLoaded', function () {
     msg.textContent = '';
     outScore.textContent = '—';
     outTitle.textContent = '—';
-    outAdvice.textContent = 'Enter values and click Calculate.';
+    outAdvice.textContent = interpretationPack.neutral.advice;
     outBox.className = 'mdc-interpretation mdc-interpretation--neutral';
   }
 
@@ -125,6 +256,19 @@ document.addEventListener('DOMContentLoaded', function () {
       calculate();
     });
   }
+
+  // ===== Initialize language & toggle =====
+  var currentLang = getLang();
+  applyLang(currentLang);
+
+  var toggleBtn = document.getElementById('lang-toggle');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', function () {
+      currentLang = (currentLang === 'pt-pt') ? 'en' : 'pt-pt';
+      localStorage.setItem('lang', currentLang);
+      applyLang(currentLang);
+    });
+  }
+
+  console.log('[s-ANT1] Ready. Lang:', currentLang);
 });
-  var ant = document.getElementById('ant');
-  var age = document.getElementById('age');
