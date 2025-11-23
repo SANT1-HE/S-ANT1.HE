@@ -185,7 +185,9 @@ document.addEventListener('DOMContentLoaded', function () {
       - (YearsOfEducation * 0.8008)
       + (Math.pow(YearsOfEducation, 2) * 0.0165);
 
-    return term / 4.1399;
+    term = term / 4.1399
+
+    return term + ANT;
   }
 
   // Updated thresholds: >15.4 excluded; 7–15.4 uncertain; <7 assume
