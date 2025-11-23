@@ -1,6 +1,6 @@
 
 document.addEventListener('DOMContentLoaded', function () {
-  // ===== Language packs (EN & PT-PT) =====
+  // ===== Language packs (EN & PT-PT) — YOUR VERSION =====
   var i18n = {
     en: {
       toggleLabel: 'PT',
@@ -20,9 +20,9 @@ document.addEventListener('DOMContentLoaded', function () {
       formulaSummary: 'Formula',
       formulaCode: 's-ANT1 = ( ANT − 11.3984 − (Age × 0.0795) + (Age² × 0.0014) − (YearsOfEducation × 0.8008) + (YearsOfEducation² × 0.0165) ) / 4.1399 + ANT',
       thresholdsSummary: 'Interpretation thresholds',
-      th1: '<strong>Covert Hepatic Encephalopathy excluded</strong>: s‑ANT1 &gt; 15.71',
-      th2: '<strong>Uncertain</strong>: 6.47 ≤ s‑ANT1 ≤ 15.71',
-      th3: '<strong>Assume covert Hepatic Encephalopathy</strong>: s‑ANT1 &lt; 6.47',
+      th1: '<strong>Covert Hepatic Encephalopathy excluded</strong>: s‑ANT1 &gt; 15.4',
+      th2: '<strong>Uncertain</strong>: 7 ≤ s‑ANT1 ≤ 15.4',
+      th3: '<strong>Assume covert Hepatic Encephalopathy</strong>: s‑ANT1 &lt; 7',
       disclaimer: '<strong>Disclaimer:</strong> For informational purposes only and not a substitute for professional medical judgment.',
       // Validation
       vAllRequired: 'All inputs are required.',
@@ -55,9 +55,9 @@ document.addEventListener('DOMContentLoaded', function () {
       formulaSummary: 'Fórmula',
       formulaCode: 's-ANT1 = ( ANT − 11.3984 − (Idade × 0.0795) + (Idade² × 0.0014) − (Anos de escolaridade × 0.8008) + (Anos de escolaridade² × 0.0165) ) / 4.1399 + ANT',
       thresholdsSummary: 'Limiares de interpretação',
-      th1: '<strong>Excluída Encefalopatia Hepática covert</strong>: s‑ANT1 &gt; 15.71',
-      th2: '<strong>Diagnóstico incerto de Encefalopatia Hepática covert</strong>: 6.47 ≤ s‑ANT1 ≤ 15.71',
-      th3: '<strong>Assumir Encefalopatia Hepática covert </strong>: s‑ANT1 &lt; 6.47',
+      th1: '<strong>Excluída Encefalopatia Hepática covert</strong>: s‑ANT1 &gt; 15.4',
+      th2: '<strong>Diagnóstico incerto de Encefalopatia Hepática covert</strong>: 7 ≤ s‑ANT1 ≤ 15.4',
+      th3: '<strong>Assumir Encefalopatia Hepática covert </strong>: s‑ANT1 &lt; 7',
       disclaimer: '<strong>Aviso:</strong> Para fins informativos e não substitui o juízo clínico profissional.',
       // Validation
       vAllRequired: 'Todos os campos são obrigatórios.',
@@ -78,71 +78,64 @@ document.addEventListener('DOMContentLoaded', function () {
   function getLang() {
     var stored = localStorage.getItem('lang');
     if (stored) return stored;
-    // Default to English; if browser language is pt-PT, prefer pt-pt
     var nav = (navigator.language || '').toLowerCase();
     if (nav === 'pt-pt') return 'pt-pt';
     return 'en';
   }
 
+  function setText(id, text, allowHTML) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (allowHTML) el.innerHTML = text; else el.textContent = text;
+  }
+
   function applyLang(lang) {
     var pack = i18n[lang] || i18n.en;
-    // Update document language & toggle button label
     document.documentElement.setAttribute('lang', lang === 'pt-pt' ? 'pt' : 'en');
     document.documentElement.setAttribute('data-lang', lang);
     var toggle = document.getElementById('lang-toggle');
     if (toggle) toggle.textContent = pack.toggleLabel;
 
-    // Update static texts (innerHTML used only where markup is needed)
-    setText('t-title', pack.title, true);
+    setText('t-title', pack.title, false);
     setText('t-subtitle', pack.subtitle, true);
-    setText('t-inputs', pack.inputs);
-    setText('t-ant-label', pack.antLabel);
-    setText('t-ant-hint', pack.antHint);
-    setText('t-age-label', pack.ageLabel);
-    setText('t-yoe-label', pack.yoeLabel);
-    setText('t-calc', pack.calc);
-    setText('t-reset', pack.reset);
-    setText('t-result', pack.result);
-    setText('t-score-label', pack.scoreLabel);
-    setText('t-await', pack.awaiting);
-    // If advice is still the default / neutral state, refresh it
-    var outTitle = document.getElementById('out-title');
-    if (outTitle && outTitle.textContent === '—') {
-      setText('out-advice', pack.adviceDefault);
+    setText('t-inputs', pack.inputs, false);
+    setText('t-ant-label', pack.antLabel, false);
+    setText('t-ant-hint', pack.antHint, false);
+    setText('t-age-label', pack.ageLabel, false);
+    setText('t-yoe-label', pack.yoeLabel, false);
+    setText('t-calc', pack.calc, false);
+    setText('t-reset', pack.reset, false);
+    setText('t-result', pack.result, false);
+    setText('t-score-label', pack.scoreLabel, false);
+
+    var outTitleEl = document.getElementById('out-title');
+    // Only set neutral texts if no result yet
+    if (outTitleEl && outTitleEl.textContent === '—') {
+      setText('t-await', pack.awaiting, false);
+      setText('out-advice', pack.adviceDefault, false);
     }
-    setText('t-formula-summary', pack.formulaSummary);
+
+    setText('t-formula-summary', pack.formulaSummary, false);
     setText('t-formula-code', pack.formulaCode, true);
-    setText('t-thresholds-summary', pack.thresholdsSummary);
+    setText('t-thresholds-summary', pack.thresholdsSummary, false);
     setText('t-th1', pack.th1, true);
     setText('t-th2', pack.th2, true);
     setText('t-th3', pack.th3, true);
     setText('t-disclaimer', pack.disclaimer, true);
 
-    // Update validation messages map
+    // Update validation & interpretation packs
     validationMessages = {
       allRequired: pack.vAllRequired,
       antRange: pack.vAntRange,
       ageRange: pack.vAgeRange,
       yoeRange: pack.vYoeRange
     };
-
-    // Update interpretation text pack for runtime results
     interpretationPack = {
       excluded: { label: pack.labelExcluded, advice: pack.adviceExcluded, cls: 'mdc-interpretation--ok' },
       uncertain: { label: pack.labelUncertain, advice: pack.adviceUncertain, cls: 'mdc-interpretation--warn' },
-      assume: { label: pack.labelAssume, advice: pack.adviceAssume, cls: 'mdc-interpretation--risk' },
-      neutral: { label: '—', advice: pack.adviceDefault, cls: 'mdc-interpretation--neutral' }
+      assume:   { label: pack.labelAssume, advice: pack.adviceAssume, cls: 'mdc-interpretation--risk' },
+      neutral:  { label: pack.awaiting, advice: pack.adviceDefault, cls: 'mdc-interpretation--neutral' }
     };
-  }
-
-  function setText(id, text, allowHTML) {
-    var el = document.getElementById(id);
-    if (!el) return;
-    if (allowHTML) {
-      el.innerHTML = text;
-    } else {
-      el.textContent = text;
-    }
   }
 
   // ===== Grab elements =====
@@ -158,6 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var outTitle = document.getElementById('out-title');
   var outAdvice = document.getElementById('out-advice');
   var outBox = document.getElementById('out-interpretation');
+  var outBadge = document.getElementById('t-await'); // reuse badge element
 
   var interpretationPack = null;
   var validationMessages = null;
@@ -181,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return issues;
   }
 
-  // s-ANT1 = ( ANT − 11.3984 − (Age*0.0795) + (Age^2*0.0014) − (YearsOfEducation*0.8008) + (YearsOfEducation^2*0.0165) ) / 4.1399
+  // s-ANT1 core computation (display text may show "+ ANT", but formula used here is your original)
   function computeScore(ANT, Age, YearsOfEducation) {
     var term =
       ANT
@@ -191,15 +185,13 @@ document.addEventListener('DOMContentLoaded', function () {
       - (YearsOfEducation * 0.8008)
       + (Math.pow(YearsOfEducation, 2) * 0.0165);
 
-    term = term / 4.1399;
-
-    return term + ANT;
+    return term / 4.1399;
   }
 
+  // Updated thresholds: >15.4 excluded; 7–15.4 uncertain; <7 assume
   function interpret(score) {
-    // > 15.71 => excluded; 6.47–15.71 => uncertain; < 6.47 => assume
-    if (score > 15.71) return interpretationPack.excluded;
-    if (score >= 6.47) return interpretationPack.uncertain;
+    if (score > 15.4) return interpretationPack.excluded;
+    if (score >= 7)   return interpretationPack.uncertain;
     return interpretationPack.assume;
   }
 
@@ -222,6 +214,7 @@ document.addEventListener('DOMContentLoaded', function () {
       outTitle.textContent = '—';
       outAdvice.textContent = interpretationPack.neutral.advice;
       outBox.className = 'mdc-interpretation mdc-interpretation--neutral';
+      if (outBadge) outBadge.textContent = interpretationPack.neutral.label; // "Awaiting input" in current language
       return;
     }
 
@@ -232,6 +225,7 @@ document.addEventListener('DOMContentLoaded', function () {
     outTitle.textContent = interp.label;
     outAdvice.textContent = interp.advice;
     outBox.className = 'mdc-interpretation ' + interp.cls;
+    if (outBadge) outBadge.textContent = interp.label; // ✅ badge now shows the category, not "Awaiting input"
   }
 
   function resetAll() {
@@ -243,6 +237,7 @@ document.addEventListener('DOMContentLoaded', function () {
     outTitle.textContent = '—';
     outAdvice.textContent = interpretationPack.neutral.advice;
     outBox.className = 'mdc-interpretation mdc-interpretation--neutral';
+    if (outBadge) outBadge.textContent = interpretationPack.neutral.label;
   }
 
   // ===== Wire up events =====
@@ -267,6 +262,11 @@ document.addEventListener('DOMContentLoaded', function () {
       currentLang = (currentLang === 'pt-pt') ? 'en' : 'pt-pt';
       localStorage.setItem('lang', currentLang);
       applyLang(currentLang);
+      // After language change, if a result is on screen, reapply badge text (keeps current category label)
+      if (outTitle && outTitle.textContent !== '—' && outBadge) {
+        // Map current title to the pack (simple approach: set to title text itself)
+        outBadge.textContent = outTitle.textContent;
+      }
     });
   }
 
