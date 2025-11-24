@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
     'pt-pt': {
       toggleLabel: 'EN',
       title: 's‑ANT1 (Animal Naming Test simplificado) — Rastreio de Encefalopatia Hepática Covert na Doença Hepática Crónica avançada',
-      subtitle: '<strong>ANT</strong> significa <em>Animal Naming Test em 1 minuto</em> que consiste num teste em que se pede ao doente "Vou-lhe pedir que me diga o maior número de animais que conseguir. Não deve repetir a mesma espécie animal com pequenas variações como por exemplo: cão, cadela. Tem 1 minuto para me dizer o maior número de animais diferentes. Pronto? Começar!". Esta plataforma calcula o valor simplificado do <strong>ANT1</strong>, mediante a idade e anos de escolaridade, para realizar o diagnóstico de <em>Encefalopatia Hepática Covert</em> e ajudar na decisão sobre os p´roximos passos a seguir.',
+      subtitle: '<strong>ANT</strong> significa <em>Animal Naming Test em 1 minuto</em> que consiste num teste em que se pede ao doente "Vou-lhe pedir que me diga o maior número de animais que conseguir. Não deve repetir a mesma espécie animal com pequenas variações como por exemplo: cão, cadela. Tem 1 minuto para me dizer o maior número de animais diferentes. Pronto? Começar!". Esta plataforma calcula o valor simplificado do <strong>ANT1</strong>, mediante a idade e anos de escolaridade, para realizar o diagnóstico de <em>Encefalopatia Hepática Covert</em> e ajudar na decisão sobre os próximos passos a seguir.',
       inputs: 'Variávies',
       antLabel: 'ANT (animais nomeados em 1 minuto)',
       antHint: 'Contagem inteira de nomes de animais únicos em 60 segundos.',
